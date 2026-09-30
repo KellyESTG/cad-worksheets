@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Sweet Home - Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Home Sweet Home</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white-50" href="history.html">History</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="container">
+        <div class="row g-4">
+            
+            <!-- Card: Kitchen -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header bg-light text-center fw-bold">
+                        Kitchen
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div><i class="fa-solid fa-temperature-three-quarters me-2 text-danger"></i>Temperature</div>
+                            <div class="text-end">
+                                <span class="fw-bold" id="kitchen-temp">19.2 °C</span><br>
+                                <small class="text-muted">5 minutes ago</small>
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div><i class="fa-solid fa-lightbulb me-2 text-secondary" id="kitchen-light-icon"></i>Lights</div>
+                            <div class="form-check form-switch m-0">
+                                <input class="form-check-input" type="checkbox" role="switch" id="kitchen-light-switch">
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div><i class="fa-solid fa-eye me-2 text-secondary"></i>West Window</div>
+                            <div class="text-end">
+                                <span class="text-muted">Open</span><br>
+                                <small class="text-muted">15 minutes ago</small>
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div><i class="fa-solid fa-eye me-2 text-secondary"></i>North Window</div>
+                            <div class="text-end">
+                                <span class="text-muted">Open</span><br>
+                                <small class="text-muted">15 minutes ago</small>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card: Living Room -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header bg-light text-center fw-bold">
+                        Living Room
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div><i class="fa-solid fa-temperature-three-quarters me-2 text-danger"></i>Temperature</div>
+                            <div class="text-end">
+                                <span class="fw-bold" id="living-temp">18.1 °C</span><br>
+                                <small class="text-muted">5 minutes ago</small>
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div><i class="fa-solid fa-lightbulb me-2 text-secondary" id="living-ceiling-icon"></i>Ceiling Lights</div>
+                            <div class="form-check form-switch m-0">
+                                <input class="form-check-input" type="checkbox" role="switch" id="living-ceiling-switch">
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div><i class="fa-solid fa-lightbulb me-2 text-secondary" id="living-ambient-icon"></i>Ambient Lights</div>
+                            <div class="form-check form-switch m-0">
+                                <input class="form-check-input" type="checkbox" role="switch" id="living-ambient-switch">
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div><i class="fa-solid fa-music me-2 text-secondary" id="living-music-icon"></i>Ambient Music</div>
+                            <div class="form-check form-switch m-0">
+                                <input class="form-check-input" type="checkbox" role="switch" id="living-music-switch">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card: Clock -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header bg-light text-center fw-bold">
+                        Clock
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div><i class="fa-regular fa-clock me-2"></i>Time</div>
+                            <span class="fw-bold" id="clock-time">--:--:--</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div><i class="fa-regular fa-calendar-days me-2"></i>Date</div>
+                            <span class="fw-bold" id="clock-date">----:--:--</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div><i class="fa-solid fa-sun me-2 text-warning"></i>Sunrise / Sunset</div>
+                            <span class="fw-bold">above horizon</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Ficheiro JavaScript -->
+    <script src="js/index.js"></script>
+</body>
+</html>
