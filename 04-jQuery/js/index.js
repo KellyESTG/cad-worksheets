@@ -2,7 +2,7 @@ $(document).ready(function() {
     'use strict';
 
     // Chave de API da OpenWeatherMap configurada
-    const API_KEY = '3200274c4ea37dd29641fa568918cf01'; 
+    const API_KEY = '663e72184e2e76ec8596277e36b5198a'; 
     let lastFetchTimestamp = null;
 
     // Inicialização da aplicação
@@ -89,19 +89,6 @@ $(document).ready(function() {
             });
         }
 
-        // Dados simulados de reserva caso ocorra algum erro na rede
-        function loadMockWeatherData(city) {
-            const mockTemp = 21.09;
-            const mockTempMax = 21.20;
-            const mockTempMin = 19.94;
-            const mockHumidity = 93;
-            
-            const now = new Date();
-            const sunrise = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 7, 46);
-            const sunset = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 54);
-
-            displayWeatherData(mockTemp, mockTempMax, mockTempMin, mockHumidity, sunrise, sunset);
-        }
 
         // Atualizar os elementos HTML com os dados de meteorologia
         function displayWeatherData(temp, tempMax, tempMin, humidity, sunriseDate, sunsetDate) {
