@@ -1,9 +1,6 @@
 $(document).ready(function() {
     'use strict';
 
-    // Teste imediato de escrita no LocalStorage ao carregar a página
-    localStorage.setItem('teste-conexao', 'OK');
-
     const API_KEY = '3200274c4ea37dd29641fa568918cf01'; 
     let lastFetchTimestamp = null;
 
@@ -14,6 +11,7 @@ $(document).ready(function() {
         setupWeather();
     }
 
+    // Guardar e Restaurar o estado dos interruptores (Exercício 1.b e 1.d)
     function setupToggleListeners() {
         const switches = [
             { key: 'kitchen-light-switch', iconId: '#kitchen-light-icon', timeId: '#kitchen-light-time', activeColor: 'text-warning' },
@@ -27,7 +25,7 @@ $(document).ready(function() {
             const $icon =$(item.iconId);
             const $time =$(item.timeId);
 
-            // Restaurar do LocalStorage
+            // 1. Carregar estado anterior do localStorage (se existir)
             const savedDataStr = localStorage.getItem(item.key);
             if (savedDataStr) {
                 try {
@@ -35,21 +33,23 @@ $(document).ready(function() {
                     const isChecked = savedData.action === 'On';
                     
                     $switch.prop('checked', isChecked);
+
                     if (isChecked) {
                         $icon.removeClass('text-secondary').addClass(item.activeColor);
                     } else {
                         $icon.removeClass(item.activeColor).addClass('text-secondary');
                     }
+
                     if (savedData.date) {
                         $time.text(savedData.date);
                     }
                 } catch (e) {
-                    console.error('Erro ao ler LocalStorage:', e);
+                    console.error('Erro ao ler do localStorage para ' + item.key, e);
                 }
             }
 
-            // Guardar no LocalStorage ao alterar
-            $switch.off('change').on('change', function() {
+            // 2. Guardar no localStorage ao clicar/mudar o interruptor
+            $switch.on('change', function() {
                 const isChecked = this.checked;
                 const actionStr = isChecked ? 'On' : 'Off';
                 const isoDateStr = new Date().toISOString();
@@ -67,12 +67,13 @@ $(document).ready(function() {
                     date: isoDateStr
                 };
 
+                // Gravação do objeto em formato JSON no localStorage (Exercício 1.b/1.d)
                 localStorage.setItem(item.key, JSON.stringify(dataObj));
-                console.log('Guardado no LocalStorage:', item.key, dataObj);
             });
         });
     }
 
+    // Atualização automática de temperatura
     function setupTemperatureUpdates() {
         function updateTemps() {
             const randomKitchen = (Math.random() * (30 - 10) + 10).toFixed(1);
@@ -81,13 +82,16 @@ $(document).ready(function() {
             $('#kitchen-temp').text(randomKitchen + ' °C');
             $('#living-temp').text(randomLiving + ' °C');
         }
+
         updateTemps();
         setInterval(updateTemps, 5000);
     }
 
+    // Relógio em tempo real
     function setupClock() {
         function updateClock() {
             const now = new Date();
+
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
@@ -99,13 +103,16 @@ $(document).ready(function() {
             $('#clock-time').text(`${hours}:${minutes}:${seconds}`);
             $('#clock-date').text(`${year}-${month}-${day}`);
         }
+
         updateClock();
         setInterval(updateClock, 1000);
     }
 
+    // API OpenWeatherMap
     function setupWeather() {
         function fetchWeather(city) {
             const url = `https://api.openweathermap.org/data/2.5/weather?units=metric&q=${encodeURIComponent(city)}&appid=${API_KEY}`;
+
             $.getJSON(url, function(data) {
                 displayWeatherData(
                     data.main.temp,
@@ -121,8 +128,16 @@ $(document).ready(function() {
         }
 
         function loadMockWeatherData(city) {
+            const mockTemp = 21.09;
+            const mockTempMax = 21.20;
+            const mockTempMin = 19.94;
+            const mockHumidity = 93;
+            
             const now = new Date();
-            displayWeatherData(21.09, 21.20, 19.94, 93, new Date(now.setHours(7,46)), new Date(now.setHours(18,54)));
+            const sunrise = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 7, 46);
+            const sunset = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 54);
+
+            displayWeatherData(mockTemp, mockTempMax, mockTempMin, mockHumidity, sunrise, sunset);
         }
 
         function displayWeatherData(temp, tempMax, tempMin, humidity, sunriseDate, sunsetDate) {
@@ -131,8 +146,11 @@ $(document).ready(function() {
             $('#weather-temp-min').text(Number(tempMin).toFixed(2) + ' °C');
             $('#weather-humidity').text(humidity + '%');
 
-            $('#weather-sunrise').text(sunriseDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
-            $('#weather-sunset').text(sunsetDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+            const sunriseStr = sunriseDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const sunsetStr = sunsetDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+            $('#weather-sunrise').text(sunriseStr);
+            $('#weather-sunset').text(sunsetStr);
 
             lastFetchTimestamp = new Date();
             updateLastUpdateText();
@@ -140,18 +158,35 @@ $(document).ready(function() {
 
         function updateLastUpdateText() {
             if (!lastFetchTimestamp) return;
-            const diffInSeconds = Math.floor((new Date() - lastFetchTimestamp) / 1000);
-            let text = diffInSeconds < 60 ? `${diffInSeconds} seconds ago` : `${Math.floor(diffInSeconds / 60)} minutes ago`;
+
+            const now = new Date();
+            const diffInSeconds = Math.floor((now - lastFetchTimestamp) / 1000);
+
+            let text = '';
+            if (diffInSeconds < 60) {
+                text = `${diffInSeconds} seconds ago`;
+            } else if (diffInSeconds < 3600) {
+                const mins = Math.floor(diffInSeconds / 60);
+                text = `${mins} minute${mins > 1 ? 's' : ''} ago`;
+            } else {
+                const hours = Math.floor(diffInSeconds / 3600);
+                text = `${hours} hour${hours > 1 ? 's' : ''} ago`;
+            }
+
             $('#weather-last-update').text(text);
         }
 
         $('#btn-get-weather').on('click', function() {
             const city = $('#city-input').val().trim();
-            if (city !== '') fetchWeather(city);
+            if (city !== '') {
+                fetchWeather(city);
+            }
         });
 
         const initialCity = $('#city-input').val();
-        if (initialCity) fetchWeather(initialCity);
+        if (initialCity) {
+            fetchWeather(initialCity);
+        }
 
         setInterval(updateLastUpdateText, 1000);
     }
