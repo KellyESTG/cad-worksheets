@@ -25,13 +25,14 @@ $(document).ready(function() {
             const $icon =$(item.iconId);
             const $time =$(item.timeId);
 
-            // 1. Carregar estado anterior do localStorage (se existir)
+            // 1. Carregar estado anterior do localStorage ao abrir/recarregar a página
             const savedDataStr = localStorage.getItem(item.key);
             if (savedDataStr) {
                 try {
                     const savedData = JSON.parse(savedDataStr);
-                    const isChecked = savedData.action === 'On';
+                    const isChecked = (savedData.action === 'On');
                     
+                    // Forçar estado checked e atributo
                     $switch.prop('checked', isChecked);
 
                     if (isChecked) {
@@ -48,9 +49,9 @@ $(document).ready(function() {
                 }
             }
 
-            // 2. Guardar no localStorage ao clicar/mudar o interruptor
+            // 2. Guardar no localStorage ao clicar no interruptor
             $switch.on('change', function() {
-                const isChecked = this.checked;
+                const isChecked = $(this).is(':checked');
                 const actionStr = isChecked ? 'On' : 'Off';
                 const isoDateStr = new Date().toISOString();
 
@@ -67,7 +68,7 @@ $(document).ready(function() {
                     date: isoDateStr
                 };
 
-                // Gravação do objeto em formato JSON no localStorage (Exercício 1.b/1.d)
+                // Gravação do objeto em JSON no localStorage (Exercício 1.b/1.d)
                 localStorage.setItem(item.key, JSON.stringify(dataObj));
             });
         });
